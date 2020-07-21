@@ -1,78 +1,91 @@
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
-
-import io.ktor.client.features.json.JsonFeature
-
-import com.begemot.knewscommon.*
-
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.request.accept
-import io.ktor.client.request.post
-import io.ktor.client.request.url
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import jdk.nashorn.internal.runtime.JSONFunctions
+import com.begemot.knewscommon.ListOriginalTransList
+import com.begemot.knewscommon.NewsPaper
+import com.begemot.translib.HolaTransLib
+import com.begemot.translib.getTranslatedArticle
+import com.begemot.knewsclient.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.list
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
-import kotlinx.serialization.parse
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 import kotlin.system.exitProcess
+
 
 data class pp(val uni:ListOriginalTransList)
 
 
 fun main(){
-
+    HolaTransLib()
     println("Hello World .... zopa 22w")
     runBlocking {
-        getHeadLinesKotilxS("GU","it")
-        getFileList()
-
+        WebTest()
+        //LocalTest()
     }
     println("FIN of everything")
     exitProcess(0)
 }
 
+
+suspend fun WebTest(){
+    println("...WebTest")
+    val z=KNews().getStoredFiles().forEach{
+        //  println(it.toString())
+
+        val d1 = LocalDateTime.now()
+        val d2 = Instant.ofEpochMilli(it.tcreation).atZone(ZoneId.systemDefault()).toLocalDateTime()
+        val d3=System.currentTimeMillis()
+        val d4=it.tcreation
+        val elapsedminutes=(d3-d4)/(1000*60)
+        //val d3=LocalDate.f
+        //val d2=Date(it.tcreation).toInstant().epochSecond
+
+        println("name ${it.name} size ${it.size} tcreation:${Date(it.tcreation)}  now $d1  elapsed time : ${elapsedminutes} in minutes ")
+    }
+
+
+    val x=KNews().getHeadLines("GU","it")
+    println("Message from server getHeadLines: ${x}")
+    val lnk="https://www.theguardian.com/society/2020/jul/18/like-putting-out-a-fire-with-a-colander-of-water-my-life-as-an-antisocial-behaviour-officer"
+    val i=KNews().getArticle("GU","it",lnk)
+    println("Message from server getArticle: ${i}")
+
+    println("End Web Test")
+
+
+
+}
+
+suspend fun LocalTest(){
+    println("...LocalTest")
+     val l="https://www.theguardian.com/society/2020/jul/18/like-putting-out-a-fire-with-a-colander-of-water-my-life-as-an-antisocial-behaviour-officer"
+     val ltA= getTranslatedArticle("GU", "it", l)
+     //val ltA2= getTranslatedHeadLines("GU","es")
+     //println(ltA2.size)
+     //println(ltA2)
+     println("End local Test")
+}
+
+
+
 suspend fun getHeadLinesKotilxS(name: String,tlang: String){
     println("get Head Lines Kotinx")
-    val s=GetHeadLines("sss","uu")
-    println("$s")
-    val client= HttpClient(OkHttp){// <----launch in Dispatchers.IO
-        engine {
-        }
-        install(JsonFeature){
-            serializer=KotlinxSerializer()
-        }
-    }
-    val x = client.post<String> {
-        url("http://knews1939.ey.r.appspot.com/getTransHeadLines")
-        contentType(ContentType.Application.Json)
-        body=GetHeadLines("GU","it")
-    }
-    val w=Json(JsonConfiguration.Default  ).parse(ListOriginalTransList.serializer(),x) //   <---- launch in Dispachers.Default
-    println("lets see ....")
-    println("Message from server: ${x}")
-    println("Message from server: ${w.lOT}")
-    client.close()
-    println("End")
+    println("before...post")
+    val x=KNews().getHeadLines("jsjs","ss")
+
 
 }
 
 
 suspend fun getFileList(){
-    println("get file list ....")
-    //List<StoredElement>
-    val fileList=KClient().client.post<List<StoredElement>>{
-        url("http://knews1939.ey.r.appspot.com/getFileList")
-        contentType(ContentType.Application.Json)
-    }
-    //val r=Json(JsonConfiguration.Stable).parse(ListSerializer(StoredElement.serializer()),x)
-    fileList.forEach{
-        println(it)
-    }
-
-
+    println("get file list ....2")
+    //val fl=KClient().post<List<StoredElement>>("getFileList")
+    val fl=KNews().getNewsPapers()
+    println("fl :$fl")
 }
+
+suspend fun getNewsPapers(){
+     println("getnewspapers")
+     val fl=KClient().post<List<NewsPaper>>("getNewsPapers")
+    println("fl ->   $fl")
+}
+
