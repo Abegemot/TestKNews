@@ -30,6 +30,7 @@ dependencies {
     implementation("io.ktor:ktor-client-logging-jvm")
     implementation("org.jsoup:jsoup")
     implementation("com.begemot:KTransLib:1.0")
+   // implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
 
 tasks {
