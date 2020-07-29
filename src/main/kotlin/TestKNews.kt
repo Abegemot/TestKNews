@@ -1,7 +1,6 @@
-import com.begemot.translib.HolaTransLib
-import com.begemot.translib.getTranslatedArticle
 import com.begemot.knewsclient.*
 import com.begemot.knewscommon.*
+import com.begemot.translib.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import java.util.*
@@ -16,11 +15,28 @@ fun main(){
     println("Hello World .... zopa 22w")
     runBlocking {
         //testlink()
-        WebTest()
-       //LocalTest()
+        //WebTest()
+        // LocalTest()
+        LocalTest2()
+        //testtoJList()
     }
     println("FIN of everything")
     exitProcess(0)
+}
+
+
+fun testtoJList(){
+    println("test jlist")
+
+
+
+    val X= mutableListOf<KArticle>(KArticle("article1","link 1"))
+
+
+
+   // z.toListKArticle()
+    println("end testjlist")
+
 }
 
 fun Long.milisToMinSecMilis():String{
@@ -49,48 +65,46 @@ fun testlink(){
 
 }
 
- //(String)->JListString
-val l={a:String->JListString(a)}
 
-
-@ImplicitReflectionSerializer
 suspend fun WebTest(){
     println("...WebTest")
    // println(KNews().deleteFiles())
     listFiles()
+
+    var r=KNews().getNewsPapers()
+    r.forEach {
+        println("handler : ${it.handler}  name : ${it.name}  language : ${it.oland}  title : ${it.title}  logoname : ${it.logoname}")
+    }
+
     var nameFile="GUit"
+
     println("getFile de $nameFile ${KNews().getFileContent(nameFile).sresult}")
     println("getFile de GU ${KNews().getFileContent("GU").sresult}")
     nameFile="GUur-officer"
     //println("getFile de $nameFile ${KNews().getFileContent(nameFile).sresult}")
    // println(KNews().deleteFiles())
-    val lka= mutableListOf<KArticle>()
+   /* val lka= mutableListOf<KArticle>()
     val p=KNews().getFileContent(nameFile)
     if(p.found){
         println(p)
-        val sq=JListString(p.sresult).toListString()
+        //val sq=JListString(p.sresult).toListString()
+        val sq=p.sresult.fromJsonToList<String>()
+
         println("sq   ${sq.size} $sq ")
-      /*  val x=ListToString2<String,JListKArticle>(sq) { b:String->JListKArticle(b)}  //{JListString ("hola")}
-
-        val ss= ListToString3<String>(sq)
-
-        val jj=ListToString1(lka)
-
-        println("xss->$ss")
-        println("x<-")*/
-        //val sq= Json(JsonConfiguration.Stable).parse(ListSerializer(String.serializer()),p.sresult)
         println(sq.size)
+        var c=1
         sq.forEach {
-            println(it)
+            println("  $c->$it")
+            c++
         }
     }else{
         println("$nameFile not found")
-    }
-    //val x=KNews().getHeadLines("GU","it")
-    // println("getHeadLines GU it: ${x}")
-     val lnk="https://www.theguardian.com/society/2020/jul/18/like-putting-out-a-fire-with-a-colander-of-water-my-life-as-an-antisocial-behaviour-officer"
-     val i=KNews().getArticle("GU","it",lnk)
-     println("getArticle: GUlinkit ${i}")
+    }*/
+    val x=KNews().getHeadLines("RT","ca")
+     println("getHeadLines RT ca: ${x}")
+    // val lnk="https://www.theguardian.com/society/2020/jul/18/like-putting-out-a-fire-with-a-colander-of-water-my-life-as-an-antisocial-behaviour-officer"
+    // val i=KNews().getArticle("GU","it",lnk)
+    // println("getArticle: GUlinkit ${i}")
 
 
 
@@ -114,13 +128,34 @@ suspend fun listFiles(){
 
 suspend fun LocalTest(){
     println("...LocalTest")
-     val l="https://www.theguardian.com/society/2020/jul/18/like-putting-out-a-fire-with-a-colander-of-water-my-life-as-an-antisocial-behaviour-officer"
-     val ltA= getTranslatedArticle("GU", "it", l)
-    println(ltA)
-     //val ltA2= getTranslatedHeadLines("GU","es")
+    // val l="https://www.theguardian.com/society/2020/jul/18/like-putting-out-a-fire-with-a-colander-of-water-my-life-as-an-antisocial-behaviour-officer"
+    // val ltA= getTranslatedArticle("GU", "it", l)
+    //println(ltA)
+
+    var r=getNewsPapers()
+    r.forEach {
+        //println("${it.olang}${it.nameFile}${it.logoName}")
+        println("handler ${it.handler}  name : ${it.name}  language : ${it.oland}  title : ${it.title}  logoname : ${it.logoname}")
+    }
+
+
+    var ltA2= getOriginalHeadLines("GU")
      //println(ltA2.size)
-     //println(ltA2)
-     println("End local Test")
+     println(ltA2)
+     println(ltA2.size)
+
+     ltA2= getOriginalHeadLines("RT")
+     println(ltA2)
+     println(ltA2.size)
+
+     val lnk="https://russian.rt.com/inotv/2020-07-25/Hill-specsluzhbi-SSHA-soobshhili-o"
+     val re= getOriginalArticle("RT",lnk)
+     println(re)
+     println(re.size)
+     re.forEach {
+         println("${it.length} $it")
+     }
+    println("End local Test")
 }
 
 
@@ -141,9 +176,21 @@ suspend fun getFileList(){
     println("fl :$fl")
 }
 
-suspend fun getNewsPapers(){
+suspend fun getNewsPapers2(){
      println("getnewspapers")
      val fl=KClient().post<List<NewsPaper>>("getNewsPapers")
     println("fl ->   $fl")
 }
 
+
+suspend fun LocalTest2(){
+    println("localtest2")
+    //val p=KNews().storeFile("pepep","jose")
+    for(I in 0..20) {
+        val p = KNews().Test()
+        println(p)
+    }
+    //val j=KNews().getHeadLines("GU","it")
+    //println(j)
+    //println("result :$p")
+}
