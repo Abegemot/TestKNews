@@ -1,7 +1,7 @@
 plugins {
     application
-    id("com.github.ben-manes.versions") version "0.29.0"
-    id ("org.jetbrains.kotlin.jvm") version ("1.3.72")
+    id("com.github.ben-manes.versions") version "0.33.0"
+    id ("org.jetbrains.kotlin.jvm") version ("1.4.10")
 }
 
 group="org.example"
