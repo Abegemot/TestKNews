@@ -1,11 +1,18 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     application
-    id("com.github.ben-manes.versions") version "0.33.0"
-    id ("org.jetbrains.kotlin.jvm") version ("1.4.10")
+    id("com.github.ben-manes.versions") version "0.36.0"
+    id ("org.jetbrains.kotlin.jvm") version ("1.4.21")
 }
 
-group="org.example"
-version= "1.0-SNAPSHOT"
+//group="com.begemot.ktestnews"
+//version= "1.0-SNAPSHOT"
+
+application{
+    mainClass.set("com.begemot.ktestnews.TestKNewsKt")
+}
+
 
 repositories {
     mavenCentral()
@@ -28,6 +35,7 @@ dependencies {
     implementation("com.begemot:KNewsClient")
     implementation( "ch.qos.logback:logback-classic")
     implementation("io.ktor:ktor-client-logging-jvm")
+    implementation("io.github.microutils:kotlin-logging-jvm")
     implementation("org.jsoup:jsoup")
     implementation("com.begemot:KTransLib:1.0")
    // implementation("org.jetbrains.kotlin:kotlin-reflect")
