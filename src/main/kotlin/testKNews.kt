@@ -4,31 +4,180 @@ import com.begemot.knewsclient.*
 import com.begemot.knewscommon.*
 import com.begemot.translib.*
 import io.ktor.util.*
-
-
 import kotlinx.coroutines.runBlocking
+
+
 import org.jsoup.Jsoup
-import java.lang.StringBuilder
 
 import java.util.*
 import kotlin.system.measureTimeMillis
 import mu.KotlinLogging
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.Path
+import kotlin.io.path.writeLines
+import kotlin.time.ExperimentalTime
 
 private val logger = KotlinLogging.logger {}
 
+@ExperimentalTime
+@ExperimentalPathApi
 fun main() {
     HolaTransLib()
-    logger.debug { "init main\ntamparampan" }
+    logger.debug { "init main" }
+    logger.debug { "init main 2" }
     runBlocking {
         //testlink()
         //WebTest()
-        LocalTest()
+       //LocalTest()
+        testSrv()
+       //  testArticle()
+        //testBulgakov()
         //LocalTest2()
         //testtoJList()
     }
-    logger.debug { "fin" }
+    logger.debug { "end main" }
     //exitProcess(0)
 }
+
+@ExperimentalPathApi
+suspend fun testArticle(){
+
+    val t=measureTimeMillis {
+        //val ls2=KNews().getArticle("BLK", "5", "en")
+        for(I in 1..10) {
+            val ls = KNews().getArticle("BLK", "5", "en")
+            //val ls=KNews().Test("1234")
+            if (ls is KResult2.Success) {
+                logger.debug { "Success!! ${ls.timeInfo()}" }
+            }
+            if (ls is KResult2.Error) {
+                logger.error { "--> Begin Error\n${ls.msg}${ls.timeInfo()}" };logger.error("<-- End Error")
+            }
+            logger.debug { "Hola papanatas" }
+        }
+    }
+    logger.debug { "main time per unit : ${t/6}" }
+    /*val t=KNews().getFileContent("Books/Bulgakov/BLK1")
+    val ls=t.sresult.lines().dropLast(1)
+    val lta=ls.map{it->OriginalTrans(it)}
+    logger.debug { lta.print(" A ver ...",227) }*/
+
+  /*  for(i in 1..33) {
+        val ls = BulgakovBook.getOriginalChapter(i)
+
+        KNews().storeFile("Books/Bulgakov/BLK$i", ls.toString())
+    }
+    val s=KNews().getFileContent("Books/Bulgakov/BLK7")
+    if(s.found){
+        val ls=s.sresult.lines()
+        logger.debug { ls.print("A veure ... que hem desat",255) }
+    }
+*/
+
+
+    /*val it=BulgakovBook.iterator()
+    while(it.hasNext()){
+        val ch=it.next()
+        logger.debug { ch.print("chapter",2) }
+    }*/
+
+    //logger.debug { t.sresult.substring(0,300) }
+    //val t = BulgakovBook.getAllBook()
+    //logger.debug { t.subList(0,15) }
+    //Files.write(Paths.get("blk2.txt",t))
+   // val p= Path("outputblk.txt")
+    //p.writeLines(t)
+    //val lart=KNews().getArticle("BLK","1","en")
+    //getTranslatedArticle("BLK","en","1")
+    //logger.debug{lart.print("BLKen1",2)}
+
+
+
+}
+
+
+@ExperimentalPathApi
+fun testBulgakov(){
+    logger.debug("I'll test bulgakov")
+  /*  var s1=""
+    var lp= ListPinyin()
+
+    s1="诗人像刚刚醒来的一个人一样，将他的手放在脸上，看到那是在族长的夜晚。"
+    lp= ListPinyin(getPinYinKtor(s1))
+    logger.debug { "B->$lp" }
+
+   // Thread.sleep(2000)
+
+
+    s1="教授说：“是的，大约是上午十点，伊万·尼古拉耶维奇先生。”"
+    lp= ListPinyin(getPinYinKtor(s1))
+    logger.debug { "A->$lp" }*/
+
+
+    //createBulgakovChapters()
+    //BulgakovBook.printForOriginalChapters()
+
+    try {
+       /* val it=BulgakovBook.iterator()
+        while(it.hasNext()){
+            val ch=it.next()
+            ch.saveAsFile()
+            logger.debug { ch.print("chapter",2) }
+            //break
+        }*/
+        //val ch=BulgakovBook.getOriginalChapter(31)
+        //ch.saveAsFile()
+       // val ch2=BulgakovBook.getOriginalChapter(32)
+       // ch2.saveAsFile()
+       // logger.debug { ch2.print("chapter",5) }
+
+       /* val it=BulgakovBook.iterator()
+        while(it.hasNext()){
+               logger.debug { it.next().print("chapter",2) }
+        }
+        val it2=BulgakovBook.iterator()
+        while(it2.hasNext()){
+            logger.debug { it2.next().print("Zchapter",2) }
+        }
+        BulgakovBook.reset()
+        while(BulgakovBook.hasNext()){
+            logger.debug { BulgakovBook.next().print("ZZchapter",2) }
+        }*/
+
+        //val tc=BulgakovBook.translateChapterAndStore(1,"en")
+        //logger.debug { tc.print("Well well well", 8, 0) }
+
+
+        //tc.storeInFile()
+
+
+          //  logger.debug { "${BulgakovBook.getChapterHeadlines()}."}
+
+
+
+
+
+        //val tc=BulgakovBook.loadTranslatedChapterFromFile(21,"en")
+        //logger.debug { tc.print("From File") }
+
+
+        //val oCh=BulgakovBook.getOriginalChapter(2)
+        //logger.debug { oCh.lString.print("chapter",2) }
+    } catch (e: Exception) {
+        logger.debug { e }
+    }
+
+    logger.debug { "end I test Bulgakov" }
+}
+
+
+
+
+
+
 
 
 fun testlink() {
@@ -112,7 +261,7 @@ suspend fun listFiles() {
 suspend fun localArticle() {
     val g = GetHeadLines("RT", "zh", 0)
     val hl = KNews().getHeadLines(g)
-    println(hl.lhl[0].kArticle.link)
+   // println(hl. .lhl[0].kArticle.link)
     println("end local article")
 }
 
@@ -150,7 +299,7 @@ suspend fun getTranslatedArt() {
     lateinit var art2: List<OriginalTrans>
     val t2 = measureTimeMillis {
         try {
-            art2 = KNews().getArticle("RT", link, "ddzh")  //why does not fail if tlang is crapy?
+            //art2 = KNews().getArticle("RT", link, "ddzh")  //why does not fail if tlang is crapy?
 
         } catch (e: Throwable) {
             println("GOT IT!!!!  ${e.message}")
@@ -167,18 +316,24 @@ suspend fun getTranslatedArt() {
 
 @KtorExperimentalAPI
 suspend fun testHeadLines() {
-
-
-    val npaper="LV"
-    //val npaper="PCh"
+    //val npaper="LV"
+    val npaper="KP"
     val lHL= getOriginalHeadLines(npaper)
+//    val lHL= getTranslatedHeadLines(npaper,"zh")
     logger.debug { lHL.print("getOriginalHeadLines",2) }
 
+    val lnk=lHL[0 ].link
+    val oart= getOriginalArticle("KP",lnk)
+    logger.debug { oart.print() }
+
+
+    //val kk=KNews().getHeadLines(GetHeadLines("PCh","en",0))
+    //logger.debug { "knews.getheadlines= ${kk.lhl.print()} $" }
     //val lnk="http://politics.people.com.cn/n1/2021/0102/c1001-31986697.html"
-    val lnk=lHL[0].link
+    //val lnk=lHL[0].link
     //val lart=getOriginalArticle(npaper,lnk)
-    val lart= getTranslatedArticle(npaper,"zh",lnk)
-    logger.debug{lart.print("OriginalArticle",2)}
+    //val lart= getTranslatedArticle(npaper,"zh",lnk)
+    //logger.debug{lart.print("OriginalArticle",2)}
 
 }
 
@@ -326,7 +481,7 @@ suspend fun LocalTest2() {
     println("localtest2")
     //val p=KNews().storeFile("pepep","jose")
     for (I in 0..20) {
-        val p = KNews().Test()
+        val p = KNews().Test("marimon2")
         println(p)
     }
     //val j=KNews().getHeadLines("GU","it")
