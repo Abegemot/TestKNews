@@ -54,10 +54,13 @@ suspend fun testmultiplesync(){
 @ExperimentalTime
 suspend fun testmultipleAsync(){
     val max=10
-    val K=(1..max).toList()
+    val K=(0..max).toList()
+    val li= listOf(0,0,0,0,2,0,2,0,1,2,3)
+    //val li= listOf(0,2,3,0,2,0,2,0,1,2,3)
+    //val li= listOf(4,2,3,4,2,0,2,0,1,2,3)
     val t=measureTime {
         K.pmap { testTest("${(0..4).random()}") }
-       // K.pmap { testTest("1") }
+        //K.pmap { it->testTest(li[it].toString()) }
 
     }
     logger.debug{ "Total time async $t  $max units: time per unit ${t/max}" }
@@ -68,8 +71,8 @@ suspend fun testmultipleAsync(){
 
 suspend fun testTest(s:String)= withContext(Dispatchers.IO){
    val t= measureTimeMillis {
-        //val r2 = KNews().Test(s)
-        val r2 = KNews().getArticle("BLK", s, "ca")
+        val r2 = KNews().Test(s)
+        //val r2 = KNews().getArticle("BLK", s, "ca")
 
        if( r2 is KResult2.Success)  logger.debug { "test1($s): -> ${r2.timeInfo()}" }
        if(r2 is KResult2.Error) logger.error { r2.msg }

@@ -48,8 +48,8 @@ suspend fun testArticle(){
     val t=measureTimeMillis {
         //val ls2=KNews().getArticle("BLK", "5", "en")
         for(I in 1..10) {
-            val ls = KNews().getArticle("BLK", "5", "en")
-            //val ls=KNews().Test("1234")
+            //val ls = KNews().getArticle("BLK", "5", "en")
+            val ls=KNews().Test("1234")
             if (ls is KResult2.Success) {
                 logger.debug { "Success!! ${ls.timeInfo()}" }
             }
