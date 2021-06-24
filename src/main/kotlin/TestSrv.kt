@@ -2,12 +2,12 @@ package com.begemot.ktestnews
 
 import com.begemot.knewsclient.KNews
 import com.begemot.knewscommon.*
+import com.begemot.translib.getNewsPapers
+import com.begemot.translib.getNewsPapersIfChangedVersion
 import io.ktor.util.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
+import kotlinx.serialization.encodeToString
 //import com.begemot.knewsclient.setLoggerx
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import kotlin.system.measureTimeMillis
 import kotlin.time.ExperimentalTime
@@ -27,7 +27,7 @@ fun testSrv(){
 
           // testgetNewsPapersWithVersion()
           testmultipleAsync()
-          // testmultiplesync()
+          // testmultipleSync()
           //testHeadLines1()
        } catch (e: Throwable) {
            logger.warn { "OSTIMA" }
@@ -40,7 +40,7 @@ fun testSrv(){
 
 
 @ExperimentalTime
-suspend fun testmultiplesync(){
+suspend fun testmultipleSync(){
     val max=10
     val t=measureTime {
         for (I in 0..max) {
@@ -58,9 +58,10 @@ suspend fun testmultipleAsync(){
     val li= listOf(0,0,0,0,2,0,2,0,1,2,3)
     //val li= listOf(0,2,3,0,2,0,2,0,1,2,3)
     //val li= listOf(4,2,3,4,2,0,2,0,1,2,3)
+
     val t=measureTime {
-        K.pmap { testTest("${(0..4).random()}") }
-        //K.pmap { it->testTest(li[it].toString()) }
+     //    K.pmap { testTest("${(0..4).random()}") }
+       K.pmap { it->testTest(li[it].toString()) }
 
     }
     logger.debug{ "Total time async $t  $max units: time per unit ${t/max}" }
@@ -74,20 +75,27 @@ suspend fun testTest(s:String)= withContext(Dispatchers.IO){
         val r2 = KNews().Test(s)
         //val r2 = KNews().getArticle("BLK", s, "ca")
 
-       if( r2 is KResult2.Success)  logger.debug { "test1($s): -> ${r2.timeInfo()}" }
-       if(r2 is KResult2.Error) logger.error { r2.msg }
+       if( r2 is KResult2.Success)  logger.debug { "Test($s): Ok    -> ${r2.timeInfo()}" }
+       if(r2 is KResult2.Error) logger.error     { "Test($s): Error -> ${r2.msg}" }
    }
     //logger.warn { "time elapsed ($t)ms" }
    // if( r is KResult2.Error)    logger.error { "result test1: time ${r.clientTime.milisToMinSecMilis()} ->\n ${r.msg}" }
 }
 
 
-@KtorExperimentalAPI
+
 suspend fun testgetNewsPapersWithVersion(){
     logger.debug { "test getNewsPapersWithVersion 1" }
-    val r = KNews().getNewsPapersWithVersion(1)
-    r.newspaper.forEach {
-        logger.debug { ("handler : ${it.handler}  name : ${it.name} desc : ${it.desc} language : ${it.olang}   logoname : ${it.logoName}")}
+
+    val k= getNewsPapersIfChangedVersion(3)
+    val s=kjson.encodeToString(k)
+    //var s=k.toStr()
+    logger.debug { s }
+
+
+    val r =  getNewsPapers()                      //KNews().getNewsPapersWithVersion(0)
+    r.forEach {
+        logger.debug { ("type : ${it.kind} handler : ${it.handler}  name : ${it.name} desc : ${it.desc} language : ${it.olang}   logoname : ${it.logoName}")}
     }
     logger.debug { "end test getNewsPapersWithVersion 1" }
 }

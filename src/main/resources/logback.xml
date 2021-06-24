@@ -22,6 +22,7 @@
     <logger name="com.begemot.ktestnews" level="DEBUG"/>
     <logger name="com.begemot.translib" level="DEBUG"/>
     <logger name="com.begemot.newspapers" level="DEBUG"/>
+    <logger name="com.begemot" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

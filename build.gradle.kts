@@ -2,8 +2,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
-    id("com.github.ben-manes.versions") version "0.38.0"
-    id ("org.jetbrains.kotlin.jvm") version ("1.4.31")
+    id("com.github.ben-manes.versions") version "0.39.0"
+    id ("org.jetbrains.kotlin.jvm") version ("1.5.10")
+    kotlin("plugin.serialization") version "1.5.10"
 }
 
 //group="com.begemot.ktestnews"
@@ -23,7 +24,7 @@ repositories {
             ignoreGradleMetadataRedirection()
         }
     }
-    jcenter()
+   // jcenter()
 }
 
 dependencies {

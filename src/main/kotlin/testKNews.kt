@@ -1,5 +1,6 @@
 package com.begemot.ktestnews
 
+import com.begemot.books.LapesteBook
 import com.begemot.knewsclient.*
 import com.begemot.knewscommon.*
 import com.begemot.translib.*
@@ -12,37 +13,62 @@ import org.jsoup.Jsoup
 import java.util.*
 import kotlin.system.measureTimeMillis
 import mu.KotlinLogging
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-import kotlin.io.path.ExperimentalPathApi
-import kotlin.io.path.Path
-import kotlin.io.path.writeLines
-import kotlin.time.ExperimentalTime
+import com.begemot.books.createLapeste
+import com.begemot.newspapers.LPeste
+import com.begemot.books.BulgakovBook
 
 private val logger = KotlinLogging.logger {}
 
-@ExperimentalTime
-@ExperimentalPathApi
+//@ExperimentalTime
 fun main() {
     HolaTransLib()
     logger.debug { "init main" }
     logger.debug { "init main 2" }
+try {
     runBlocking {
         //testlink()
         //WebTest()
-       //LocalTest()
-        testSrv()
-       //  testArticle()
-        //testBulgakov()
+        //LocalTest()
+        //testSrv()
+        testgetNewsPapersWithVersion()
+        //testSerializedos()
+        //createLapeste()
+        //->testLocalArticle()
+        //->deleteServerFiles()
+        //->listServerFiles()
+        //  testArticle()
+        //->testXgetTranslatedString()
+        //->testHeadLines()
+        //->createBulgakovChapters()
+        //->translateBulgakovChapter()
         //LocalTest2()
         //testtoJList()
+
     }
     logger.debug { "end main" }
     //exitProcess(0)
+}catch (e:Exception){
+    logger.debug{e.message}
+    logger.debug { e }
+}
 }
 
-@ExperimentalPathApi
+suspend fun testa(){
+     logger.debug{BulgakovBook.book.directory}
+     logger.debug{LapesteBook.book.directory}
+
+}
+
+
+suspend fun testXgetTranslatedString(){
+    val t="Hola como estas"
+    val s= XgetTranslatedString(t,"es","zh")
+    logger.debug { "original ${s.original}  translated ${s.translated}" }
+}
+
+
+
+
 suspend fun testArticle(){
 
     val t=measureTimeMillis {
@@ -99,73 +125,18 @@ suspend fun testArticle(){
 }
 
 
-@ExperimentalPathApi
-fun testBulgakov(){
+
+suspend fun createBulgakovChapters(){
     logger.debug("I'll test bulgakov")
-  /*  var s1=""
-    var lp= ListPinyin()
-
-    s1="诗人像刚刚醒来的一个人一样，将他的手放在脸上，看到那是在族长的夜晚。"
-    lp= ListPinyin(getPinYinKtor(s1))
-    logger.debug { "B->$lp" }
-
-   // Thread.sleep(2000)
-
-
-    s1="教授说：“是的，大约是上午十点，伊万·尼古拉耶维奇先生。”"
-    lp= ListPinyin(getPinYinKtor(s1))
-    logger.debug { "A->$lp" }*/
-
-
-    //createBulgakovChapters()
-    //BulgakovBook.printForOriginalChapters()
 
     try {
-       /* val it=BulgakovBook.iterator()
-        while(it.hasNext()){
-            val ch=it.next()
-            ch.saveAsFile()
-            logger.debug { ch.print("chapter",2) }
-            //break
-        }*/
-        //val ch=BulgakovBook.getOriginalChapter(31)
-        //ch.saveAsFile()
-       // val ch2=BulgakovBook.getOriginalChapter(32)
-       // ch2.saveAsFile()
-       // logger.debug { ch2.print("chapter",5) }
-
-       /* val it=BulgakovBook.iterator()
-        while(it.hasNext()){
-               logger.debug { it.next().print("chapter",2) }
+        for(i in 1..33) {
+            val ls = BulgakovBook.getOriginalChapter(i)
+            logger.debug { ls.lString.print("Chapter $i") }
+            KNews().storeFile("Books/Bulgakov/BLK$i", ls.toString())
         }
-        val it2=BulgakovBook.iterator()
-        while(it2.hasNext()){
-            logger.debug { it2.next().print("Zchapter",2) }
-        }
-        BulgakovBook.reset()
-        while(BulgakovBook.hasNext()){
-            logger.debug { BulgakovBook.next().print("ZZchapter",2) }
-        }*/
-
-        //val tc=BulgakovBook.translateChapterAndStore(1,"en")
-        //logger.debug { tc.print("Well well well", 8, 0) }
 
 
-        //tc.storeInFile()
-
-
-          //  logger.debug { "${BulgakovBook.getChapterHeadlines()}."}
-
-
-
-
-
-        //val tc=BulgakovBook.loadTranslatedChapterFromFile(21,"en")
-        //logger.debug { tc.print("From File") }
-
-
-        //val oCh=BulgakovBook.getOriginalChapter(2)
-        //logger.debug { oCh.lString.print("chapter",2) }
     } catch (e: Exception) {
         logger.debug { e }
     }
@@ -174,7 +145,15 @@ fun testBulgakov(){
 }
 
 
+suspend fun translateBulgakovChapter(){
+    val ch=BulgakovBook.getOriginalChapter(2)
+    logger.debug { ch.lString.print("PonTi Pilatus",20) }
 
+    val ltch=transPayListOfParagraphs(ch.lString,"ru","zh")
+    logger.debug { ltch.print("trans ponti pilatus",20) }
+
+
+}
 
 
 
@@ -188,6 +167,11 @@ fun testlink() {
     val str2 = str.substringBeforeLast("it")
     println(str2)
 
+}
+
+
+suspend fun deleteServerFiles(){
+    KNews().deleteFiles()
 }
 
 
@@ -244,7 +228,7 @@ suspend fun WebTest() {
 
 }
 
-suspend fun listFiles() {
+suspend fun listServerFiles() {
     println("listFiles")
     val ct = System.currentTimeMillis()
     KNews().getStoredFiles().forEach {
@@ -281,61 +265,62 @@ suspend fun getNewsPapersf() {
 }
 
 
-suspend fun getTranslatedArt() {
-    println("getheadlines")
-
-    val link = getOriginalHeadLines("RT")[0].link
-    println(link)
-    println("getTranslatedArticle")
-
-    lateinit var art1: List<OriginalTrans>
-    val t1 = measureTimeMillis {
-        art1 = getTranslatedArticle("RT", "ddzh", link)
-        //val art = ltA[0]
-    }
-    println("after try catch   $t1 ms  list original trans ${art1.size}")
-   // println("art as it is :\n$art1\nend art as it is")
-
-    lateinit var art2: List<OriginalTrans>
-    val t2 = measureTimeMillis {
-        try {
-            //art2 = KNews().getArticle("RT", link, "ddzh")  //why does not fail if tlang is crapy?
-
-        } catch (e: Throwable) {
-            println("GOT IT!!!!  ${e.message}")
-        }
-    }
-    //println("art->$art2")
-    println("after try catch   $t2 ms list original trans ${art2.size}")
-
-
-
+suspend fun testLocalArticle() {
+    logger.debug { "testLocalArticle" }
+    val name="LM"
+    val lA=getOriginalHeadLines(name)
+    //logger.debug { lA.print("LM Head Lines") }
+    val link = lA[0].link
+    logger.debug { link }
+    logger.debug { "title : ${lA[0].title }"}
+    val oA=getOriginalArticle(name,link)
+    val oAS=splitLongText2(oA)
+    logger.debug { oAS.print("Original Article",3) }
 
 }
 
 
-@KtorExperimentalAPI
 suspend fun testHeadLines() {
     //val npaper="LV"
-    val npaper="KP"
-    val lHL= getOriginalHeadLines(npaper)
-//    val lHL= getTranslatedHeadLines(npaper,"zh")
-    logger.debug { lHL.print("getOriginalHeadLines",2) }
+    //val npaper="KP"
+    //val npaper="SZ"
+    val npaper="PCh"
+    val timer= measureTimeMillis {
+        printNArticle(npaper, "en", 1)
+    }
+    logger.debug { "elapsed milis $timer" }
+}
 
-    val lnk=lHL[0 ].link
-    val oart= getOriginalArticle("KP",lnk)
-    logger.debug { oart.print() }
+suspend fun printNArticle(npaper:String, tlang:String, n:Int=0){
+  /*  val l=KNews().getHeadLines(GetHeadLines(npaper,tlang,0))
+    if(l is KResult2.Success){
+         logger.debug { l.timeInfo()}
+         logger.debug { l.t.lhl.print("From Server") }
+    }*/
+
+    try {
+        val t= measureTimeMillis {
+            val lHL = getTranslatedHeadLines(npaper, tlang)
+            logger.debug { lHL.print("translated HeadLines of $npaper", 2) }
+
+            //logger.debug("Time Elapsed getTranlsatedHeadLines $t")
 
 
-    //val kk=KNews().getHeadLines(GetHeadLines("PCh","en",0))
-    //logger.debug { "knews.getheadlines= ${kk.lhl.print()} $" }
-    //val lnk="http://politics.people.com.cn/n1/2021/0102/c1001-31986697.html"
-    //val lnk=lHL[0].link
-    //val lart=getOriginalArticle(npaper,lnk)
-    //val lart= getTranslatedArticle(npaper,"zh",lnk)
-    //logger.debug{lart.print("OriginalArticle",2)}
+            val lnk = lHL[n].kArticle.link
+            val nameArticleToStore = "Articles/$npaper${lnk.takeLast(15).replace("/","")}$tlang"
+            logger.debug { "namearticle: $nameArticleToStore" }
+            val lArt= getTranslatedArticle(npaper,tlang,lnk)
+            logger.debug { lArt.print("translated Article of $npaper",amount = 2) }
+
+        }
+        //val lArt= getTranslatedArticle(npaper,tlang,lnk)
+        //logger.debug { lArt.print("translated Article of $npaper",amount = 2) }
+    } catch (e: Exception) {
+        logger.warn { e }
+    }
 
 }
+
 
 suspend fun getStaticFile(){
     println("getStaticFile")
@@ -360,7 +345,7 @@ fun testGoogle(){
                  .followRedirects(true)
             .get()
     println(ant.html())*/
-    println(translatePayString("mariposa","es","zh"))
+    //println(translatePayString("mariposa","es","zh"))
 
 }
 
