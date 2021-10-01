@@ -38,7 +38,7 @@ interface XIBook: XIBaseNewsPaper {
         get()=KindOfNews.BOOK
 }
 
-@Serializable
+/*@Serializable
 object A:XINewsPaper{
     override val olang: String
         get() = "de"
@@ -53,9 +53,9 @@ object A:XINewsPaper{
         get() = "SZ"
     override val url: String
         get() = "https://www.sueddeutsche.de"
-}
+}*/
 
-@Serializable
+/*@Serializable
 object B:XIBook{
     override val directory: String
         get() = "Bulgakov"
@@ -72,22 +72,22 @@ object B:XIBook{
     override val url: String
         get() = "https://en.wikipedia.org/wiki/The_Master_and_Margarita"
 
-}
+}*/
 
-@Serializable
-class NPX(val version:Int=0, val newspapers:List<XIBaseNewsPaper>)
+//@Serializable
+/*class NPX(val version:Int=0, val newspapers:List<XIBaseNewsPaper>)
 
 fun NPX.toJSTR():String = kjson.encodeToString<NPX>(this)
 fun fromStrToNPX(str:String): NPX = kjson.decodeFromString(str)
+*/
 
-
-val modulex= SerializersModule {
+/*val modulex= SerializersModule {
     polymorphic(IBaseNewsPaper::class) {
         subclass(SZ::class, SZ.serializer())
         subclass(GU::class,GU.serializer())
     }
 
-}
+}*/
 
 
 /*val modulex= SerializersModule {
@@ -96,7 +96,7 @@ val modulex= SerializersModule {
         subclass(B::class,B.serializer())
     }
 }*/
-val kjson2 = Json {  serializersModule = modulex }
+//val kjson2 = Json {  serializersModule = modulex }
 
 
 fun testSerializedos(){
@@ -110,7 +110,7 @@ fun testSerializedos(){
     val y= kjson2.decodeFromString<NPX>(x)
     logger.debug { "encoded npv:= $npv" }
     logger.debug { "Y          := ${ y.newspapers[0].kind }" }*/
-    val u=getNewsPapers()
+/*    val u=getNewsPapers()
 
     logger.debug { "getNewsPapers  $u" }
 
@@ -118,7 +118,7 @@ fun testSerializedos(){
     val s= kjson2.encodeToString(v) //    v.toStr()
 
     logger.debug { "getNewsPapersIfChanged  $v" }
-
+*/
 
 
 }

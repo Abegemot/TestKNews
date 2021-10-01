@@ -3,8 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     id("com.github.ben-manes.versions") version "0.39.0"
-    id ("org.jetbrains.kotlin.jvm") version ("1.5.10")
-    kotlin("plugin.serialization") version "1.5.10"
+    id ("org.jetbrains.kotlin.jvm") version ("1.5.30")
+    //  kotlin("plugin.serialization") version "1.5.30"
+    //kotlin("plugin.serialization") version "1.5.21"
 }
 
 //group="com.begemot.ktestnews"
@@ -41,7 +42,7 @@ dependencies {
     implementation("com.begemot:KTransLib:1.0")
    // implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
-
+/*
 tasks {
     compileKotlin {
         kotlinOptions.jvmTarget = "1.8"
@@ -50,4 +51,4 @@ tasks {
         kotlinOptions.jvmTarget = "1.8"
     }
 
-}
+}*/

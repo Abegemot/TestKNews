@@ -62,7 +62,7 @@ suspend fun createLapeste(){
     //Files.write(Path(nameFile),txt.toByteArray(),StandardOpenOption.CREATE)
     logger.debug { "LAPESTE" }
     //getTransChapter()
-    LapesteBook.createChapters()
+    LapesteBook.createChapters(true,"""(?<!M)(?>!»)\. """)
    //BulgakovBook.createChapters()
 
 

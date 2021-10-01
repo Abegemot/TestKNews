@@ -4,7 +4,6 @@ import com.begemot.books.LapesteBook
 import com.begemot.knewsclient.*
 import com.begemot.knewscommon.*
 import com.begemot.translib.*
-import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
 
 
@@ -13,16 +12,18 @@ import org.jsoup.Jsoup
 import java.util.*
 import kotlin.system.measureTimeMillis
 import mu.KotlinLogging
-import com.begemot.books.createLapeste
-import com.begemot.newspapers.LPeste
 import com.begemot.books.BulgakovBook
+import com.begemot.books.createLapeste
+import com.begemot.ktestnews.com.begemot.books.createDeadSouls1
+import com.begemot.ktestnews.com.begemot.books.createRougeEtNoir
+import com.begemot.ktestnews.com.begemot.books.createWard6
 
 private val logger = KotlinLogging.logger {}
 
 //@ExperimentalTime
 fun main() {
     HolaTransLib()
-    logger.debug { "init main" }
+    logger.debug { "init main bb" }
     logger.debug { "init main 2" }
 try {
     runBlocking {
@@ -30,15 +31,20 @@ try {
         //WebTest()
         //LocalTest()
         //testSrv()
-        testgetNewsPapersWithVersion()
+        //testgetNewsPapersWithVersion()
         //testSerializedos()
         //createLapeste()
-        //->testLocalArticle()
+        //createWard6()
+        //testLocalArticle()
         //->deleteServerFiles()
         //->listServerFiles()
         //  testArticle()
+   //     createDeadSouls1()
+        //createLapeste()
+        //createWard6()
+        //createRougeEtNoir()
         //->testXgetTranslatedString()
-        //->testHeadLines()
+        testHeadLines("LM")
         //->createBulgakovChapters()
         //->translateBulgakovChapter()
         //LocalTest2()
@@ -48,14 +54,14 @@ try {
     logger.debug { "end main" }
     //exitProcess(0)
 }catch (e:Exception){
-    logger.debug{e.message}
-    logger.debug { e }
+    logger.error {e.message}
+    logger.error { e }
 }
 }
 
 suspend fun testa(){
-     logger.debug{BulgakovBook.book.directory}
-     logger.debug{LapesteBook.book.directory}
+     logger.debug{BulgakovBook.book.googleDir}
+     logger.debug{LapesteBook.book.googleDir}
 
 }
 
@@ -72,53 +78,13 @@ suspend fun testXgetTranslatedString(){
 suspend fun testArticle(){
 
     val t=measureTimeMillis {
-        //val ls2=KNews().getArticle("BLK", "5", "en")
-        for(I in 1..10) {
-            //val ls = KNews().getArticle("BLK", "5", "en")
-            val ls=KNews().Test("1234")
-            if (ls is KResult2.Success) {
-                logger.debug { "Success!! ${ls.timeInfo()}" }
-            }
-            if (ls is KResult2.Error) {
-                logger.error { "--> Begin Error\n${ls.msg}${ls.timeInfo()}" };logger.error("<-- End Error")
-            }
-            logger.debug { "Hola papanatas" }
-        }
+        val handler="VW"
+        val a=getOriginalArticle(handler,getOriginalHeadLines(handler)[2].link)
+        logger.debug { "first original article" }
+        logger.debug { a }
     }
-    logger.debug { "main time per unit : ${t/6}" }
-    /*val t=KNews().getFileContent("Books/Bulgakov/BLK1")
-    val ls=t.sresult.lines().dropLast(1)
-    val lta=ls.map{it->OriginalTrans(it)}
-    logger.debug { lta.print(" A ver ...",227) }*/
 
-  /*  for(i in 1..33) {
-        val ls = BulgakovBook.getOriginalChapter(i)
-
-        KNews().storeFile("Books/Bulgakov/BLK$i", ls.toString())
-    }
-    val s=KNews().getFileContent("Books/Bulgakov/BLK7")
-    if(s.found){
-        val ls=s.sresult.lines()
-        logger.debug { ls.print("A veure ... que hem desat",255) }
-    }
-*/
-
-
-    /*val it=BulgakovBook.iterator()
-    while(it.hasNext()){
-        val ch=it.next()
-        logger.debug { ch.print("chapter",2) }
-    }*/
-
-    //logger.debug { t.sresult.substring(0,300) }
-    //val t = BulgakovBook.getAllBook()
-    //logger.debug { t.subList(0,15) }
-    //Files.write(Paths.get("blk2.txt",t))
-   // val p= Path("outputblk.txt")
-    //p.writeLines(t)
-    //val lart=KNews().getArticle("BLK","1","en")
-    //getTranslatedArticle("BLK","en","1")
-    //logger.debug{lart.print("BLKen1",2)}
+    logger.debug { "time  $t" }
 
 
 
@@ -127,7 +93,7 @@ suspend fun testArticle(){
 
 
 suspend fun createBulgakovChapters(){
-    logger.debug("I'll test bulgakov")
+    logger.debug{"I'll test bulgakov"}
 
     try {
         for(i in 1..33) {
@@ -267,7 +233,7 @@ suspend fun getNewsPapersf() {
 
 suspend fun testLocalArticle() {
     logger.debug { "testLocalArticle" }
-    val name="LM"
+    val name="KP"
     val lA=getOriginalHeadLines(name)
     //logger.debug { lA.print("LM Head Lines") }
     val link = lA[0].link
@@ -280,13 +246,22 @@ suspend fun testLocalArticle() {
 }
 
 
-suspend fun testHeadLines() {
+suspend fun testHeadLines(npaper: String) {
     //val npaper="LV"
     //val npaper="KP"
     //val npaper="SZ"
-    val npaper="PCh"
+    //val npaper="PCh"
+    //val npaper="VW"
     val timer= measureTimeMillis {
-        printNArticle(npaper, "en", 1)
+        val ol=getOlang(npaper)
+        val lA= getOriginalHeadLines(npaper)
+        logger.debug { "size list Articles: ${lA.size}" }
+        logger.debug{ lA.print(npaper) }
+        //printNArticle(npaper, "en", 1)
+        val tA=translateHeadLines(lA, getOlang(npaper),"en")
+        logger.debug { tA.print(npaper) }
+
+
     }
     logger.debug { "elapsed milis $timer" }
 }
@@ -351,11 +326,11 @@ fun testGoogle(){
 
 
 suspend fun LocalTest() {
-    logger.debug("...LocalTest")
+    logger.debug{"...LocalTest"}
     //testGoogle()
     //localArticle()
     //getNewsPapersf()
-    testHeadLines()
+    testHeadLines("LV")
     //getStaticFile()
     //getTranslatedArt()
 /*
@@ -473,3 +448,6 @@ suspend fun LocalTest2() {
     //println(j)
     //println("result :$p")
 }
+
+
+//Max 448
