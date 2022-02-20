@@ -95,7 +95,7 @@ suspend fun testgetNewsPapersWithVersion(){
 
     val r =  getNewsPapers()                      //KNews().getNewsPapersWithVersion(0)
     r.forEach {
-        logger.debug { ("type : ${it.kind} handler : ${it.handler}  name : ${it.name} desc : ${it.desc} language : ${it.olang}   logoname : ${it.logoName}")}
+        logger.debug { ("type : ${it.kind} mutable : ${it.mutable} language : ${it.olang}  handler : ${it.handler}  name : ${it.name} desc : ${it.desc}  logoname : ${it.logoName}")}
     }
     logger.debug { "end test getNewsPapersWithVersion 1" }
 }

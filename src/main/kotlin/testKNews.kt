@@ -14,6 +14,8 @@ import kotlin.system.measureTimeMillis
 import mu.KotlinLogging
 import com.begemot.books.BulgakovBook
 import com.begemot.books.createLapeste
+import com.begemot.ktestnews.com.begemot.books.CatalanLessons
+import com.begemot.ktestnews.com.begemot.books.CatalanLessons.createCatalanLessons
 import com.begemot.ktestnews.com.begemot.books.createDeadSouls1
 import com.begemot.ktestnews.com.begemot.books.createRougeEtNoir
 import com.begemot.ktestnews.com.begemot.books.createWard6
@@ -31,7 +33,7 @@ try {
         //WebTest()
         //LocalTest()
         //testSrv()
-        //testgetNewsPapersWithVersion()
+        testgetNewsPapersWithVersion()
         //testSerializedos()
         //createLapeste()
         //createWard6()
@@ -39,12 +41,16 @@ try {
         //->deleteServerFiles()
         //->listServerFiles()
         //  testArticle()
-   //     createDeadSouls1()
+        //createDeadSouls1()
+        //createBook("")
+        //createCatalanLessons()
         //createLapeste()
         //createWard6()
         //createRougeEtNoir()
         //->testXgetTranslatedString()
-        testHeadLines("LM")
+        //testHeadLines("CNV")
+        //testArticle("CNV",0)
+       // testArticle("W6",0)
         //->createBulgakovChapters()
         //->translateBulgakovChapter()
         //LocalTest2()
@@ -74,13 +80,19 @@ suspend fun testXgetTranslatedString(){
 
 
 
+fun createBook(handler:String){
 
-suspend fun testArticle(){
+}
+
+
+suspend fun testArticle(handler:String,nArticle:Int=0){
 
     val t=measureTimeMillis {
-        val handler="VW"
-        val a=getOriginalArticle(handler,getOriginalHeadLines(handler)[2].link)
-        logger.debug { "first original article" }
+        val hl=getOriginalHeadLines(handler)[nArticle]
+        val a=getOriginalArticle(handler,hl.link)
+
+        logger.debug { "original article n $nArticle" }
+        logger.debug { "${hl.title}" }
         logger.debug { a }
     }
 

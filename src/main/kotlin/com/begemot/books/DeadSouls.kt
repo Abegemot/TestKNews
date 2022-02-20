@@ -42,3 +42,5 @@ suspend fun  createDeadSouls1(){
     regex="""(?<!т.-е)(?<!г)(?<!\.\.)(?<!\.)\. """
     DeadSoulsIg.createChapters(true,regex)
 }
+
+

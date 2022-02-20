@@ -153,9 +153,9 @@ interface IBookGen : Iterator<Chapter> {
 
     suspend fun createChapters(test: Boolean = true, regex: String = "") {
         logger2.debug { "createChapters test=$test" }
-       //  for(i in 1..lChapterPositions.size){
-        val u = 2
-        for (i in u..u) {
+         for(i in 1..lChapterPositions.size){
+       // val u = 2
+       // for (i in u..u) {
             val chapter: Chapter = getOriginalChapter(i, regex)
             //logger2.debug { printFirstLast(chapter.lString,"Chapter $i",4) }
             logger2.debug { chapter.lString.print("chapter  $i", chapter.lString.size, false) }
