@@ -19,6 +19,8 @@ import com.begemot.ktestnews.com.begemot.books.CatalanLessons.createCatalanLesso
 import com.begemot.ktestnews.com.begemot.books.createDeadSouls1
 import com.begemot.ktestnews.com.begemot.books.createRougeEtNoir
 import com.begemot.ktestnews.com.begemot.books.createWard6
+import kotlinx.serialization.Serializable
+import java.io.File
 
 private val logger = KotlinLogging.logger {}
 
@@ -33,7 +35,8 @@ try {
         //WebTest()
         //LocalTest()
         //testSrv()
-        testgetNewsPapersWithVersion()
+        //testgetNewsPapersWithVersion()
+        //testRemoteNewsPapers()
         //testSerializedos()
         //createLapeste()
         //createWard6()
@@ -48,8 +51,12 @@ try {
         //createWard6()
         //createRougeEtNoir()
         //->testXgetTranslatedString()
-        //testHeadLines("CNV")
-        //testArticle("CNV",0)
+        //testHeadLines("VW")
+        //testKArticle()
+       // testMP3("Lemonde.png")
+        generateSongs("src/main/resources/CatalaNV/CatalanLessons1.xml","CNV")
+        //generateSongs("src/main/resources/RussianSongs/AllSongs.xml","RussSongs1")
+       // testArticle("VW",0)
        // testArticle("W6",0)
         //->createBulgakovChapters()
         //->translateBulgakovChapter()
@@ -64,6 +71,32 @@ try {
     logger.error { e }
 }
 }
+
+
+suspend fun testMP3(sName:String){
+      val sName2="nochcbetla"   //"Images/Lemonde.png"
+      //val r=KNews().getImage2(sName2)
+    val file:File= File("src/lemonde.png")
+    val r=KNews().getIMG(sName,file)
+
+   /* if(r is KResult3.Success){
+        val t=r.t.found
+        val u=r.t.bresult.size
+        logger.debug { "$sName2 found $t  size $u" }
+    } else
+    {
+        logger.error { "$sName2 error ${r.msg()}" }
+    }*/
+}
+
+
+fun testKArticle(){
+    val lA=listOf(KArticle2("Una"), KArticle2("dos"), KArticle2("tres","mylink"))
+    val s= toJStr(lA)
+    logger.debug { s }
+
+}
+
 
 suspend fun testa(){
      logger.debug{BulgakovBook.book.googleDir}
@@ -88,15 +121,24 @@ fun createBook(handler:String){
 suspend fun testArticle(handler:String,nArticle:Int=0){
 
     val t=measureTimeMillis {
-        val hl=getOriginalHeadLines(handler)[nArticle]
+        val hln=getOriginalHeadLines(handler)
+
+        logger.debug { hln.print("HeadLines") }
+        val hl=hln[nArticle]
+        logger.debug {"title: ${hl.title}" }
         val a=getOriginalArticle(handler,hl.link)
+        //val lp= splitLongText2(a)
+        val lSentences = buildListSentences(a,"ca")
 
         logger.debug { "original article n $nArticle" }
         logger.debug { "${hl.title}" }
         logger.debug { a }
+
+        logger.debug { lSentences.print("Article",100)}
+
     }
 
-    logger.debug { "time  $t" }
+    logger.debug { "time  ($t) ms" }
 
 
 
@@ -158,11 +200,13 @@ suspend fun WebTest() {
     // println(KNews().deleteFiles())
     //listFiles()
 
-    var r = KNews().getNewsPapersWithVersion(1)
-    r.newspaper.forEach {
-        println("handler : ${it.handler}  name : ${it.name} desc : ${it.desc} language : ${it.olang}   logoname : ${it.logoName}")
-    }
+    var r = KNews().getNewsPapersWithVersion3(1)
+    if(r is KResult3.Success) {
 
+        r.t.newspaper.forEach {
+            println("handler : ${it.handler}  name : ${it.name} desc : ${it.desc} language : ${it.olang}   logoname : ${it.logoName}")
+        }
+    }
     //var nameFile="GU"
 
     // println("getFile de $nameFile ${KNews().getFileContent(nameFile).sresult}")
@@ -228,13 +272,15 @@ suspend fun localArticle() {
 }
 
 suspend fun getNewsPapersf() {
-    lateinit var r:NewsPaperVersion
+    lateinit var r:KResult3<NewsPaperVersion>
     val t = measureTimeMillis {
         // r = getNewsPapersIfChangedVersion(0)
-        r=KNews().getNewsPapersWithVersion(0)
+        r=KNews().getNewsPapersWithVersion3(0)
     }
-    println("news papers version : ${r.version}  $t ms")
-    println(r)
+    if(r is KResult3.Success) {
+        println("news papers version : ${(r as KResult3.Success<NewsPaperVersion>).t.version}  $t ms")
+        println(r)
+    }
     //r.newspaper.forEach {
     //    println(it)
     //}
@@ -265,13 +311,13 @@ suspend fun testHeadLines(npaper: String) {
     //val npaper="PCh"
     //val npaper="VW"
     val timer= measureTimeMillis {
-        val ol=getOlang(npaper)
+       // val ol=getOlang(npaper)
         val lA= getOriginalHeadLines(npaper)
-        logger.debug { "size list Articles: ${lA.size}" }
+        logger.debug { "$npaper size list Articles: ${lA.size}" }
         logger.debug{ lA.print(npaper) }
         //printNArticle(npaper, "en", 1)
-        val tA=translateHeadLines(lA, getOlang(npaper),"en")
-        logger.debug { tA.print(npaper) }
+        //val tA=translateHeadLines(lA, getOlang(npaper),"en")
+        //logger.debug { tA.print(npaper) }
 
 
     }
@@ -316,7 +362,7 @@ suspend fun getStaticFile(){
         val url = "https://storage.googleapis.com/knews1939.appspot.com/HeadLines/LVzh"
         val d = Jsoup.connect(url).ignoreContentType(true).get().text()
         println(d)
-        val thl=THeadLines(0, JListOriginalTransLink(d).toList())
+        val thl=THeadLines(0, fromJStr(d))
         println(thl)
     }
     println("$t1 ms" )

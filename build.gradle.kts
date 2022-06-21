@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     id("com.github.ben-manes.versions") version "0.42.0"
-    id ("org.jetbrains.kotlin.jvm") version ("1.6.10")
+    id ("org.jetbrains.kotlin.jvm") version ("1.6.21")
     //  kotlin("plugin.serialization") version "1.5.30"
     //kotlin("plugin.serialization") version "1.5.21"
 }

@@ -17,7 +17,7 @@ private val logger = KotlinLogging.logger {}
 
 
 
-@KtorExperimentalAPI
+
 @ExperimentalTime
 fun testSrv(){
     logger.debug { "start test srv2" }
@@ -75,13 +75,21 @@ suspend fun testTest(s:String)= withContext(Dispatchers.IO){
         val r2 = KNews().Test(s)
         //val r2 = KNews().getArticle("BLK", s, "ca")
 
-       if( r2 is KResult2.Success)  logger.debug { "Test($s): Ok    -> ${r2.timeInfo()}" }
-       if(r2 is KResult2.Error) logger.error     { "Test($s): Error -> ${r2.msg}" }
+       if( r2 is KResult3.Success)  logger.debug { "Test($s): Ok    -> ${r2.timeInfo()}" }
+       if(r2 is KResult3.Error) logger.error     { "Test($s): Error -> ${r2.msg}" }
    }
     //logger.warn { "time elapsed ($t)ms" }
    // if( r is KResult2.Error)    logger.error { "result test1: time ${r.clientTime.milisToMinSecMilis()} ->\n ${r.msg}" }
 }
 
+
+suspend fun testRemoteNewsPapers(){
+      val rr=KNews().getNewsPapersWithVersion3(0)
+     when(rr){
+         is KResult3.Success-> logger.debug { "succes ${rr.timeInfo()}" }
+     }
+
+}
 
 
 suspend fun testgetNewsPapersWithVersion(){
