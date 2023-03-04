@@ -71,25 +71,27 @@ suspend fun testmultipleAsync(){
 
 
 suspend fun testTest(s:String)= withContext(Dispatchers.IO){
-   val t= measureTimeMillis {
-        val r2 = KNews().Test(s)
-        //val r2 = KNews().getArticle("BLK", s, "ca")
 
-       if( r2 is KResult3.Success)  logger.debug { "Test($s): Ok    -> ${r2.timeInfo()}" }
-       if(r2 is KResult3.Error) logger.error     { "Test($s): Error -> ${r2.msg}" }
+        val r2 = KNews().TestKNews()
+        if(r2.res.isSuccess) logger.debug { r2.logInfo() }
+        else logger.error { r2.logInfo() }
    }
-    //logger.warn { "time elapsed ($t)ms" }
-   // if( r is KResult2.Error)    logger.error { "result test1: time ${r.clientTime.milisToMinSecMilis()} ->\n ${r.msg}" }
-}
 
 
-suspend fun testRemoteNewsPapers(){
-      val rr=KNews().getNewsPapersWithVersion3(0)
-     when(rr){
-         is KResult3.Success-> logger.debug { "succes ${rr.timeInfo()}" }
+/*suspend fun testRemoteNewsPapers(){
+   when(val rr=KNews().getNewsPapersWithVersion3(0)){
+         is KResult3.Success-> { logger.debug { "1 succes ${rr.timeInfo()}" }
+             logger.debug { "succes ${rr.t}" }
+         }
+         else -> {  logger.error { "error  ${rr.msg()}" }}
      }
-
-}
+    when(val rr=KNews().getNewsPapersWithVersion3(0)){
+        is KResult3.Success-> { logger.debug { "2 succes ${rr.timeInfo()}" }
+            logger.debug { "succes ${rr.t}" }
+        }
+        else -> {  logger.error { "error  ${rr.msg()}" }}
+    }
+}*/
 
 
 suspend fun testgetNewsPapersWithVersion(){

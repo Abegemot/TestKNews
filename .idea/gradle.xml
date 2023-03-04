@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/../KnewsPlatform2" name="KnewsPlatform2">
+                <projects>
+                  <project path="$PROJECT_DIR$/../KnewsPlatform2" />
+                  <project path="$PROJECT_DIR$/../KnewsPlatform2/sharedlibrary" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/../KTransLib" name="KTransLib">
+                <projects>
+                  <project path="$PROJECT_DIR$/../KTransLib" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/../KNewsClient" name="KNewsClient">
+                <projects>
+                  <project path="$PROJECT_DIR$/../KNewsClient" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/../KNewsCommon" name="KNewsCommon">
+                <projects>
+                  <project path="$PROJECT_DIR$/../KNewsCommon" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="delegatedBuild" value="true" />
+        <option name="testRunner" value="GRADLE" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$USER_HOME$/.gradle/wrapper/dists/gradle-5.4.1-bin/e75iq110yv9r9wt1a6619x2xm/gradle-5.4.1" />
+        <option name="gradleJvm" value="1.8 (3)" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/../KNewsClient" />
+            <option value="$PROJECT_DIR$/../KNewsCommon" />
+            <option value="$PROJECT_DIR$/../KTransLib" />
+            <option value="$PROJECT_DIR$/../KnewsPlatform2" />
+            <option value="$PROJECT_DIR$/../KnewsPlatform2/sharedlibrary" />
+            <option value="$PROJECT_DIR$" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

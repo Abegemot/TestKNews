@@ -5,6 +5,9 @@ import com.begemot.knewscommon.IBook
 import com.begemot.newspapers.CNV
 import java.nio.file.Files
 import java.nio.file.Paths
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 object CatalanLessons : IBookGen {
     override val book: IBook
@@ -14,7 +17,7 @@ object CatalanLessons : IBookGen {
     override val outputpath: String
         get() = "${filepath}/CatalaNV/"
     override val filename: String
-        get() ="CatalaNV.txt"
+        get() ="CatalanLessons1.xml"
     override val lChapterPositions: List<Pair<Int, Int>>
         get() = listOf(Pair(1,8),Pair(9,14),Pair(15,21))
 

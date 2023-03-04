@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
-    id("com.github.ben-manes.versions") version "0.42.0"
-    id ("org.jetbrains.kotlin.jvm") version ("1.6.21")
+    id("com.github.ben-manes.versions") version "0.46.0"
+    id ("org.jetbrains.kotlin.jvm") version ("1.7.20")
     //  kotlin("plugin.serialization") version "1.5.30"
     //kotlin("plugin.serialization") version "1.5.21"
 }
@@ -34,9 +34,9 @@ dependencies {
     implementation( "org.jetbrains.kotlin:kotlin-stdlib")
     implementation("io.ktor:ktor-client-core")
     implementation("io.ktor:ktor-client-serialization-jvm")
-    implementation("com.begemot:knewscommon")
+    implementation("com.begemot:KNewsCommon")
     implementation("com.begemot:KNewsClient")
-    //implementation( "ch.qos.logback:logback-classic")
+    implementation( "ch.qos.logback:logback-classic")   //aquest es necesari
     implementation("io.ktor:ktor-client-logging-jvm")
     implementation("io.github.microutils:kotlin-logging-jvm")
     implementation("org.jsoup:jsoup")

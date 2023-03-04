@@ -1,21 +1,27 @@
 <BOOK title="LLiçons de Catala I" lang="ca">
 <CHAPTER title="Els numeros primers">
+zero
 un, dos, tres, cuatre, cinc, sis, set, vuit, nou, deu.
 onze, dotze, tretze, catorze, quinze, setze, diset, divuit, dinou, vint.
 vint i un, vint i dos, vint i tres.
 treinta, quaranta, cincuanta, seixanta, setanta, vuitanta, noranta, cent.
 doscents, trescents ,quatrecents, cinqcents, siscents, setcents, vuitcents, noucents, mil.
 uni, deri, cateri
+
 </CHAPTER>
 <CHAPTER title="Temps cronologic">
+<PART>
 Avans d'ahir, ahir, avui, dema, dema pasat.
 demati,mitgdia,tarda,vespre,nit.
 hivern, primavera, estiu, tardor.
+</PART>
 </CHAPTER>
 <CHAPTER title="Les posicions en l'espai">
+<PART>
 a dalt de la muntanya hi a una casa.
 a baix de la muntanya hi a un llac.
 devant de la casa hi a un arbre.
 al redera de la casa hi a un petit jardi.
+</PART>
 </CHAPTER>
 </BOOK>

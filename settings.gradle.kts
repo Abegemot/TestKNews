@@ -7,6 +7,8 @@ dependencyResolutionManagement {
         mavenLocal()
     }
     includeBuild("H:/prg/KnewsPlatform2")
+    includeBuild("../KTransLib")
+    includeBuild("../KNewsClient")
 }
 
 /*

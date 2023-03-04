@@ -40,8 +40,8 @@ suspend fun generateSongs(sNameFile:String, sHandler:String){
     logger.debug { "NAMEFILE=${nP.getGoogleHeadLinesDir()}" }
 
     val sOriginalHeadLines=KNews().getOriginalHeadLines(GetHeadLines(sHandler,"",0))
-    if(sOriginalHeadLines is KResult3.Success){
-       if(sOriginalHeadLines.t==sListArticles){
+    if(sOriginalHeadLines.res.isSuccess){
+       if(sOriginalHeadLines.res.getOrThrow()==sListArticles){  //!!!
            logger.debug { "NO CHANGED HEADLINES" }
        }
         else
@@ -59,8 +59,8 @@ suspend fun generateSongs(sNameFile:String, sHandler:String){
         val txt= trimSentence(song.wholeText())
         //logger.debug { txt }
          val originalArticle=KNews().getOriginalArticle(sHandler,(index+1).toString(),"")
-         if(originalArticle is KResult3.Success){
-              val oArticle=originalArticle.t
+         if(originalArticle.res.isSuccess){
+              val oArticle=originalArticle.res.getOrThrow() !!!!
              if(oArticle==txt){
                  logger.debug { "original=new " }
              } else {

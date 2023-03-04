@@ -1,5 +1,9 @@
 package com.begemot.ktestnews
 
+import com.begemot.bookgenerator.createBook
+import com.begemot.bookgenerator.createListChaptersFromXML
+import com.begemot.bookgenerator.getIBookFromHandler
+
 import com.begemot.books.LapesteBook
 import com.begemot.knewsclient.*
 import com.begemot.knewscommon.*
@@ -14,11 +18,8 @@ import kotlin.system.measureTimeMillis
 import mu.KotlinLogging
 import com.begemot.books.BulgakovBook
 import com.begemot.books.createLapeste
-import com.begemot.ktestnews.com.begemot.books.CatalanLessons
+import com.begemot.ktestnews.com.begemot.books.*
 import com.begemot.ktestnews.com.begemot.books.CatalanLessons.createCatalanLessons
-import com.begemot.ktestnews.com.begemot.books.createDeadSouls1
-import com.begemot.ktestnews.com.begemot.books.createRougeEtNoir
-import com.begemot.ktestnews.com.begemot.books.createWard6
 import kotlinx.serialization.Serializable
 import java.io.File
 
@@ -26,6 +27,7 @@ private val logger = KotlinLogging.logger {}
 
 //@ExperimentalTime
 fun main() {
+    System.setProperty(kotlinx.coroutines.DEBUG_PROPERTY_NAME,"on")
     HolaTransLib()
     logger.debug { "init main bb" }
     logger.debug { "init main 2" }
@@ -35,7 +37,7 @@ try {
         //WebTest()
         //LocalTest()
         //testSrv()
-        //testgetNewsPapersWithVersion()
+       // testgetNewsPapersWithVersion()
         //testRemoteNewsPapers()
         //testSerializedos()
         //createLapeste()
@@ -46,7 +48,14 @@ try {
         //  testArticle()
         //createDeadSouls1()
         //createBook("")
-        //createCatalanLessons()
+           //createCatalanLessons()
+           //createTxehovStories()
+           //createListChaptersFromXML("CNV")
+
+        createBook("TXS")
+        testSrv33()
+        //testKRES()
+         // createListChaptersFromXML("TXS")
         //createLapeste()
         //createWard6()
         //createRougeEtNoir()
@@ -54,8 +63,8 @@ try {
         //testHeadLines("VW")
         //testKArticle()
        // testMP3("Lemonde.png")
-        generateSongs("src/main/resources/CatalaNV/CatalanLessons1.xml","CNV")
-        //generateSongs("src/main/resources/RussianSongs/AllSongs.xml","RussSongs1")
+       // generateSongs("src/main/resources/CatalaNV/CatalanLessons1.xml","CNV")
+       //generateSongs("src/main/resources/RussianSongs/AllSongs.xml","RussSongs1")
        // testArticle("VW",0)
        // testArticle("W6",0)
         //->createBulgakovChapters()
@@ -69,6 +78,7 @@ try {
 }catch (e:Exception){
     logger.error {e.message}
     logger.error { e }
+    logger.error { getStackExceptionMsg2(e) }
 }
 }
 
@@ -112,9 +122,10 @@ suspend fun testXgetTranslatedString(){
 }
 
 
-
-fun createBook(handler:String){
-
+suspend fun testKRES(){
+    logger.debug { "testKRES" }
+    val t=KNews().TestKNews()
+    logger.debug { "testKNews=$t" }
 }
 
 
@@ -200,13 +211,14 @@ suspend fun WebTest() {
     // println(KNews().deleteFiles())
     //listFiles()
 
-    var r = KNews().getNewsPapersWithVersion3(1)
-    if(r is KResult3.Success) {
-
-        r.t.newspaper.forEach {
+    val r = KNews().getNewsPapersWithVersion3(1)
+    r.res.onSuccess {
+        it.newspaper.forEach { it ->
             println("handler : ${it.handler}  name : ${it.name} desc : ${it.desc} language : ${it.olang}   logoname : ${it.logoName}")
         }
     }
+
+
     //var nameFile="GU"
 
     // println("getFile de $nameFile ${KNews().getFileContent(nameFile).sresult}")
@@ -272,13 +284,13 @@ suspend fun localArticle() {
 }
 
 suspend fun getNewsPapersf() {
-    lateinit var r:KResult3<NewsPaperVersion>
+    lateinit var r:KResult<NewsPaperVersion>
     val t = measureTimeMillis {
         // r = getNewsPapersIfChangedVersion(0)
         r=KNews().getNewsPapersWithVersion3(0)
     }
-    if(r is KResult3.Success) {
-        println("news papers version : ${(r as KResult3.Success<NewsPaperVersion>).t.version}  $t ms")
+    if(r.res.isFailure) {
+        println("news papers version : ${r.res.getOrThrow().version}  $t ms")
         println(r)
     }
     //r.newspaper.forEach {
@@ -499,8 +511,8 @@ suspend fun LocalTest2() {
     println("localtest2")
     //val p=KNews().storeFile("pepep","jose")
     for (I in 0..20) {
-        val p = KNews().Test("marimon2")
-        println(p)
+        //al p = KNews().Test("marimon2")
+        //println(p)
     }
     //val j=KNews().getHeadLines("GU","it")
     //println(j)
@@ -508,4 +520,32 @@ suspend fun LocalTest2() {
 }
 
 
-//Max 448
+suspend fun testSrv33() {
+    logger.debug { "Begin testSrv33" }
+    //KNews().testKNews(getIBookFromHandler("TXS").getGoogleHeadLinesDir())
+
+    val r1=KNews().getNewsPapers()
+    logger.debug { "$r1" }
+
+
+
+    val r=KNews().getNewsPapersWithVersion3(0)
+    //r.res
+   //.onSuccess { logger.debug { r.logInfo()  } }
+   //.onFailure { logger.error { r.logInfo() } }
+   logw(r)
+
+    val r3=KNews().getGoogleFileSize(getIBookFromHandler("TXS").getGoogleHeadLinesDir())
+    r3.res
+        .onSuccess { logger.debug { r3.logInfo()  } }
+        .onFailure { logger.error { r3.logInfo() } }
+
+
+    logger.debug { "End testSrv33" }
+    //KNews().getGoogleFileSize(getIBookFromHandler("TXS").getGoogleHeadLinesDir())
+    //    .onSuccess { logger.debug { "result getGoogle file size $it" } }
+    //    .onFailure { logger.error { "failure: $it" } }
+}
+
+
+//Max 448 522

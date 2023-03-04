@@ -3,7 +3,7 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <!-- pattern>%M %X{REQ} %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern -->
-            <pattern>cli %d{mm:ss.SSS} %highlight(%-5level)  [%thread] %logger{0}.%M->\(%file:%line\) %msg \n</pattern>
+            <pattern>zli %d{mm:ss.SSS} %highlight(%-5level)  [%thread] %logger{0}.%M->\(%file:%line\) %msg \n</pattern>
             <!--pattern>rrr%d{HH:mm:ss.SSS} %highlight(%-5level)  [%thread] %logger{36}.%M->%msg \(%line\) [%F:%L] %n </pattern-->
         </encoder>
     </appender>
