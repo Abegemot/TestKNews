@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
-    id("com.github.ben-manes.versions") version "0.46.0"
-    id ("org.jetbrains.kotlin.jvm") version ("1.7.20")
+    id("com.github.ben-manes.versions") version "0.47.0"
+    id ("org.jetbrains.kotlin.jvm") version ("1.9.0")
     //  kotlin("plugin.serialization") version "1.5.30"
     //kotlin("plugin.serialization") version "1.5.21"
 }
@@ -15,6 +15,9 @@ application{
     mainClass.set("com.begemot.ktestnews.TestKNewsKt")
 }
 
+kotlin{
+    jvmToolchain(11)
+}
 
 /*repositories {
     mavenCentral()
@@ -43,13 +46,15 @@ dependencies {
     implementation("com.begemot:KTransLib:1.0")
    // implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
-/*
+
+
+
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
     }
 
-}*/
+}

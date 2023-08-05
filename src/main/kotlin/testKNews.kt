@@ -37,7 +37,7 @@ try {
         //WebTest()
         //LocalTest()
         //testSrv()
-       // testgetNewsPapersWithVersion()
+        //testgetNewsPapersWithVersion()
         //testRemoteNewsPapers()
         //testSerializedos()
         //createLapeste()
@@ -52,8 +52,9 @@ try {
            //createTxehovStories()
            //createListChaptersFromXML("CNV")
 
-        createBook("TXS")
-        testSrv33()
+        //createBook("TXS")
+        //testSrv33()
+        testGoogleDrive()
         //testKRES()
          // createListChaptersFromXML("TXS")
         //createLapeste()
@@ -525,7 +526,7 @@ suspend fun testSrv33() {
     //KNews().testKNews(getIBookFromHandler("TXS").getGoogleHeadLinesDir())
 
     val r1=KNews().getNewsPapers()
-    logger.debug { "$r1" }
+     logger.debug { "$r1" }
 
 
 
@@ -536,6 +537,7 @@ suspend fun testSrv33() {
    logw(r)
 
     val r3=KNews().getGoogleFileSize(getIBookFromHandler("TXS").getGoogleHeadLinesDir())
+    logw(r3,"Holis")
     r3.res
         .onSuccess { logger.debug { r3.logInfo()  } }
         .onFailure { logger.error { r3.logInfo() } }
@@ -547,5 +549,11 @@ suspend fun testSrv33() {
     //    .onFailure { logger.error { "failure: $it" } }
 }
 
+
+suspend fun testGoogleDrive()
+{
+    logger.debug { "I'll test Google Drive" }
+    logger.debug { "One of those days...." }
+}
 
 //Max 448 522
